@@ -12,6 +12,7 @@ let currentEnemies = 0;
 const playerSprite = new Image();
 playerSprite.src = "./assets/nickfury.png";
 const keys = [];
+const ammoSlot = [];
 const superEnemy = new Image();
 superEnemy.src = "./assets/bahamut.png";
 const mainEnemy = new Image();
@@ -21,7 +22,7 @@ enemyImg.src = "./assets/phoenix.png";
 const background = new Image();
 background.src = "./assets/futurebg.jpg";
 const ammoPic = new Image();
-ammoPic.src = "./assets/batSprite.png";
+ammoPic.src = "./assets/ammoSheet.png";
 
 const random2numbers = (min, max) => {
   min = Math.ceil(min);
@@ -127,6 +128,62 @@ class Vermin {
 //   "./leviathan.png"
 // );
 
+class Ammo {
+  constructor(width, height, frameX, frameY, img, speed) {
+    this.width = width;
+    this.height = height;
+    this.x = player.x;
+    this.y = player.y;
+    this.frameX = frameX;
+    this.frameY = frameY;
+    this.img = img;
+    this.speed = speed;
+  }
+
+  update() {
+    this.x += this.speed;
+    // const dx = this.x - player.x;
+    // const dy = this.y - player.y;
+    // this.distance = Math.sqrt(dx * dx + dy * dy) * 2;
+  }
+
+  draw() {
+    drawSprite(
+      this.img,
+      this.width * this.frameX,
+      this.height * this.frameY,
+      this.width,
+      this.height,
+      this.x,
+      this.y,
+      this.width,
+      this.height
+    );
+    if (this.frameX < 5) {
+      this.frameX++;
+    } else {
+      this.frameX = 0;
+    }
+    //this.frameX <= 3 ? this.frameX++ : (this.frameX = 0);
+  }
+}
+
+function shootAmmo() {
+  if (keys[32]) {
+    ammoSlot.push(new Ammo(39, 25, 0, 3, ammoPic, 10));
+    for (i = 0; i < ammoSlot.length; i++) {
+      ammoSlot[i].update();
+      ammoSlot[i].draw();
+
+      console.log("hello");
+      if (ammoSlot[i].x > canvas.width + ammoSlot[i].width) {
+        ammoSlot.splice(i, 1);
+        i--;
+      }
+    }
+  }
+}
+
 let popEnemies = setInterval(() => {
   enemyArray.push(new Enemies());
   enemyArray.push(
@@ -164,6 +221,7 @@ function handleEnemies() {
 
     if (enemyArray[i].x < 0 - enemyArray[i].width) {
       enemyArray.splice(i, 1);
+      i--;
     }
 
     if (enemyArray[i]) {
@@ -172,6 +230,7 @@ function handleEnemies() {
           score++;
           enemyArray[i].counted = true;
           enemyArray.splice(i, 1);
+          i--;
         }
       }
     }
@@ -266,6 +325,7 @@ function animate() {
 function updateGame() {
   animate();
   handleEnemies();
+  shootAmmo();
   movePlayer();
   handlePlayerFrame();
   requestAnimationFrame(updateGame);
