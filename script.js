@@ -10,16 +10,18 @@ let gameFrame = 0;
 let maxEnemies = 30;
 let currentEnemies = 0;
 const playerSprite = new Image();
-playerSprite.src = "./nickfury.png";
+playerSprite.src = "./assets/nickfury.png";
 const keys = [];
 const superEnemy = new Image();
-superEnemy.src = "./bahamut.png";
+superEnemy.src = "./assets/bahamut.png";
 const mainEnemy = new Image();
-mainEnemy.src = "leviathan.png";
+mainEnemy.src = "./assets/leviathan.png";
 const enemyImg = new Image();
-enemyImg.src = "phoenix.png";
+enemyImg.src = "./assets/phoenix.png";
 const background = new Image();
-background.src = "futurebg.jpg";
+background.src = "./assets/futurebg.jpg";
+const ammoPic = new Image();
+ammoPic.src = "./assets/batSprite.png";
 
 const random2numbers = (min, max) => {
   min = Math.ceil(min);
